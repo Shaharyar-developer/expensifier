@@ -1,5 +1,5 @@
 "use client";
-import { Expense } from "@/types/costs";
+import { Expense, Settings } from "@/types/costs";
 import React from "react";
 
 export type ExpenseProviderProps = {
@@ -7,6 +7,8 @@ export type ExpenseProviderProps = {
   setData: React.Dispatch<React.SetStateAction<Expense[]>>;
   addExpense: (expense: Expense) => void;
   removeExpense: (id: string) => void;
+  settings: Settings;
+  setCurrencyPrefix: (prefix: string) => void;
 };
 
 export const ExpenseProviderContext =

@@ -21,8 +21,8 @@ export const Navbar = () => {
       <h1 className="text-3xl font-bold tracking-wide text-clip bg-clip-text text-transparent bg-gradient-to-br dark:from-white from-black from-20% dark:via-neutral-400 via-neutral-600 via-70% dark:to-white to-black">
         EXPENSIFIER
       </h1>
-      <Button variant={"outline"} size={"lg"} className="font-normal">
-        Generate Report
+      <Button variant={"outline"} size={"lg"} className="font-normal border-2">
+        Get Report
       </Button>
       <div className="flex gap-4">
         <div className="flex">
