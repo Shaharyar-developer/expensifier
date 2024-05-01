@@ -4,7 +4,9 @@ import { useContext } from "react";
 export const useMoneyTracker = () => {
   const context = useContext(MoneyTrackerProviderContext);
   if (context === null) {
-    throw new Error("useMyContext must be used within a MyProvider");
+    throw new Error(
+      "useMoneyTracker must be used within a MoneyTrackerProviderContext"
+    );
   }
   return context;
 };

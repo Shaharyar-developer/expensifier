@@ -10,30 +10,38 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { MoneyTracker, Settings } from "@/types/costs";
+import { MoneyTrackerItem, Settings } from "@/types/costs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
+import { Button } from "@/components/ui/button";
+import { Edit3, Trash } from "lucide-react";
 
 export const MoneyTrackerPanel = () => {
-  const { data, settings } = useMoneyTracker();
-  const [filter, setFilter] = useState<string>();
+  const { data, settings, search } = useMoneyTracker();
+  const filteredData = data.filter((item) => {
+    if (
+      settings.filterDate &&
+      settings.filterDate.from &&
+      settings.filterDate.to
+    ) {
+      return (
+        item.date.getTime() >= new Date(settings.filterDate.from).getTime() &&
+        item.date.getTime() <= new Date(settings.filterDate.to).getTime()
+      );
+    }
+    return true;
+  });
   return (
-    <motion.section className="rounded-2xl p-0.5 relative w-full">
-      <div className="bg-background rounded-2xl h-full w-full flex flex-col gap-3 p-4 border-2 max-h-[85dvh] overflow-y-auto">
-        <Input
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Search"
-          className="rounded-md"
-        />
-        {data.map((MoneyTracker, idx) => (
+    <motion.section className="p-2 relative w-full">
+      <div className="bg-background rounded-2xl h-full w-full flex flex-col gap-3 p-4 border overflow-y-auto">
+        {filteredData.map((item, idx) => (
           <MoneyTrackerCard
             filterRange={settings.filterDate}
-            filter={filter}
-            key={idx + MoneyTracker.id}
-            MoneyTracker={MoneyTracker}
+            filter={search}
+            key={idx + item.id}
+            MoneyTrackerItem={item}
             prefix={settings.currency_prefix}
           />
         ))}
@@ -43,44 +51,29 @@ export const MoneyTrackerPanel = () => {
           </span>
         )}
       </div>
-      {/* <motion.div
-        initial={{
-          backgroundSize: "200% 200%",
-          backgroundPosition: "0% 0%",
-        }}
-        animate={{
-          backgroundSize: "200% 200%",
-          backgroundPosition: "200% 100%",
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          repeatType: "loop",
-          ease: "linear",
-        }}
-        className="absolute top-0 left-0 h-full w-full bg-gradient-to-r  from-background dark:via-white/50 via-black to-background/70   -z-10 !overflow-hidden rounded-2xl"
-      /> */}
     </motion.section>
   );
 };
 
 const MoneyTrackerCard = ({
-  MoneyTracker,
+  MoneyTrackerItem,
   prefix,
   filter,
   filterRange,
 }: {
-  MoneyTracker: MoneyTracker;
+  MoneyTrackerItem: MoneyTrackerItem;
   prefix: string;
   filter: string | undefined;
   filterRange: DateRange | undefined;
 }) => {
   if (
     filter &&
-    !MoneyTracker.title.toLowerCase().includes(filter.toLowerCase()) &&
-    !MoneyTracker.description.toLowerCase().includes(filter.toLowerCase()) &&
-    !MoneyTracker.amount.toString().includes(filter.toLowerCase()) &&
-    !MoneyTracker.category.toLowerCase().includes(filter.toLowerCase())
+    !MoneyTrackerItem.title.toLowerCase().includes(filter.toLowerCase()) &&
+    !MoneyTrackerItem.description
+      .toLowerCase()
+      .includes(filter.toLowerCase()) &&
+    !MoneyTrackerItem.amount.toString().includes(filter.toLowerCase()) &&
+    !MoneyTrackerItem.category.toLowerCase().includes(filter.toLowerCase())
   )
     return null;
   if (
@@ -88,30 +81,77 @@ const MoneyTrackerCard = ({
     filterRange.from &&
     filterRange.to &&
     !(
-      filterRange.from.getTime() <= MoneyTracker.date.getTime() &&
-      filterRange.to.getTime() >= MoneyTracker.date.getTime()
+      new Date(filterRange.from).getTime() <= MoneyTrackerItem.date.getTime() &&
+      new Date(filterRange.to).getTime() >= MoneyTrackerItem.date.getTime()
     )
   )
     return null;
 
   return (
-    <Card className="">
+    <Card
+      className={`${
+        MoneyTrackerItem.type === "expense"
+          ? "border-red-700/30"
+          : "border-emerald-700/30"
+      } relative backdrop-blur-0 border-2 border-dashed rounded-2xl`}
+    >
       <CardHeader className="flex-row justify-between">
         <div>
-          <CardTitle className="capitalize">{MoneyTracker.title}</CardTitle>
-          <CardDescription>{MoneyTracker.description}</CardDescription>
+          <CardTitle className="capitalize">{MoneyTrackerItem.title}</CardTitle>
+          <CardDescription>{MoneyTrackerItem.description}</CardDescription>
         </div>
-        <CardDescription>{format(MoneyTracker.date, "PPP")}</CardDescription>
+        <CardDescription>
+          {format(MoneyTrackerItem.date, "PPP")}
+        </CardDescription>
       </CardHeader>
-      <CardContent className="flex justify-between">
-        <p className="text-foreground/50">
-          {prefix}
-          {MoneyTracker.amount}
-        </p>
-        <Badge variant={"default"} className="text-sm">
-          {MoneyTracker.category}
-        </Badge>
+      <CardContent className="flex justify-between py-2">
+        <div className="flex flex-col gap-4">
+          <p className="text-foreground/70">
+            {prefix}
+            {MoneyTrackerItem.amount.toLocaleString()}
+          </p>
+          <Badge variant={"default"} className="text-sm flex justify-center">
+            {MoneyTrackerItem.category}
+          </Badge>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            className="dark:text-emerald-300 text-emerald-600"
+          >
+            <Edit3 strokeWidth={1.5} />
+          </Button>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            className="dark:text-red-400 text-red-700"
+          >
+            <Trash strokeWidth={1.5} />
+          </Button>
+        </div>
       </CardContent>
+      <div className="absolute top-0 left-0 h-full w-full bg-black/70 backdrop-blur-3xl rounded-2xl -z-10 " />
+      <motion.div
+        initial={{
+          backgroundPosition: "100% 0%",
+          backgroundSize: "200% 200%",
+        }}
+        animate={{
+          backgroundPosition: "0% 100%",
+          backgroundSize: "200% 200%",
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+        className={`absolute top-0 left-0 h-full w-full  ${
+          MoneyTrackerItem.type === "expense"
+            ? "from-red-700/40 bg-gradient-to-r"
+            : " from-emerald-700/40 bg-gradient-to-l"
+        } rounded-2xl -z-20`}
+      />
     </Card>
   );
 };

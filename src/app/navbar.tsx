@@ -17,7 +17,7 @@ import {
 
 export const Navbar = () => {
   return (
-    <nav className="min-h-12 border-b sticky top-0 dark:bg-black/5 bg-white/5  backdrop-blur-xl flex justify-between items-center px-8 py-4">
+    <nav className="min-h-12 border-b sticky top-0 dark:bg-black/40 bg-white/40 z-50 backdrop-blur-xl flex justify-between items-center px-8 py-4">
       <h1 className="text-3xl font-bold tracking-wide text-clip bg-clip-text text-transparent bg-gradient-to-br dark:from-white from-black from-20% dark:via-neutral-400 via-neutral-600 via-70% dark:to-white to-black">
         EXPENSIFIER
       </h1>
