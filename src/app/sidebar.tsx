@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 export const SettingsPanel = () => {
   return (
     <>
-      <motion.section className=" bg-accent/10  ml-2 rounded-2xl  p-4 min-h-60 overflow-y-auto relative flex flex-col gap-3 ">
+      <motion.section className=" bg-accent/10 ml-2 rounded-2xl p-4 overflow-y-auto relative flex flex-col gap-3 ">
         <h1 className="text-xl text-center font-bold">Settings</h1>
         <Separator />
         <SettingsOptions />
@@ -103,7 +103,7 @@ export const SummaryPanel = () => {
     (curr) => curr.type === "revenue" && curr.amount === lowestRevenue
   );
   return (
-    <motion.section className="  bg-accent/10 ml-2 rounded-2xl  p-4 min-h-60 overflow-y-auto relative flex flex-col gap-3 ">
+    <motion.section className="bg-accent/10 ml-2 rounded-2xl  p-2 overflow-y-auto relative flex flex-col gap-3 ">
       <h1 className="text-xl text-center font-semibold flex justify-center">
         Report&nbsp;
         {dateRange && dateRange.from && dateRange.to && (
@@ -117,11 +117,11 @@ export const SummaryPanel = () => {
       <Separator />
       <div className="flex flex-col justify-center h-full gap-3">
         <div className="border p-2 rounded-2xl flex flex-col gap-2">
-          <p className="flex">
+          <p className="flex ">
             Total Expenses: {settings.currency_prefix}
             {totalExpenses.toLocaleString()}
           </p>
-          <p className="flex">
+          <p className="flex ">
             Highest Expense: {settings.currency_prefix}
             {highestExpense.toLocaleString()} <Dot />
             {highestExpenseItem[0]?.title}
@@ -130,7 +130,7 @@ export const SummaryPanel = () => {
               ? format(highestExpenseItem[0]?.date, "LLL dd, y")
               : "No Expense"}
           </p>
-          <p className="flex">
+          <p className="flex ">
             Lowest Expense: {settings.currency_prefix}
             {lowestExpense.toLocaleString()}
             <Dot />
@@ -175,10 +175,6 @@ export const Search = () => {
   const { search, setSearch } = useMoneyTracker();
   return (
     <div className="p-4 flex flex-col gap-3">
-      <h1 className="text-xl text-center font-semibold flex justify-center">
-        Search
-      </h1>
-      <Separator />
       <Input
         value={search}
         onChange={(e) => setSearch(e.target.value)}

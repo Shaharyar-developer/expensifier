@@ -17,12 +17,12 @@ import {
 
 export const Navbar = () => {
   return (
-    <nav className="min-h-12 border-b sticky top-0 dark:bg-black/40 bg-white/40 z-50 backdrop-blur-xl flex justify-between items-center px-8 py-4">
-      <h1 className="text-3xl font-bold tracking-wide text-clip bg-clip-text text-transparent bg-gradient-to-br dark:from-white from-black from-20% dark:via-neutral-400 via-neutral-600 via-70% dark:to-white to-black">
+    <nav className="min-h-12 border-b sticky top-0 dark:bg-black/40 bg-white/40 z-50 backdrop-blur-xl flex md:flex-row justify-between items-center md:px-8 py-4 gap-2">
+      <h1 className="lg:text-3xl font-bold tracking-wide text-clip bg-clip-text text-transparent bg-gradient-to-br dark:from-white from-black from-20% dark:via-neutral-400 via-neutral-600 via-70% dark:to-white to-black">
         EXPENSIFIER
       </h1>
 
-      <div className="flex gap-4">
+      <div className="flex md:gap-4">
         <div className="flex">
           <Dialog>
             <Tooltip>
@@ -31,6 +31,7 @@ export const Navbar = () => {
                   <Button
                     className="rounded-none rounded-l-2xl border-r"
                     variant={"default"}
+                    size={"sm"}
                   >
                     <Plus /> Revenue
                   </Button>
@@ -57,6 +58,7 @@ export const Navbar = () => {
                   <Button
                     className="rounded-none rounded-r-2xl"
                     variant={"default"}
+                    size={"sm"}
                   >
                     <Plus /> Expense
                   </Button>
