@@ -1,4 +1,6 @@
-export type Expense = {
+import { DateRange } from "react-day-picker";
+
+export type MoneyTracker = {
   id: string;
   title: string;
   description: string;
@@ -16,4 +18,5 @@ export type Revenue = {
 };
 export type Settings = {
   currency_prefix: string;
+  filterDate?: DateRange | undefined;
 };

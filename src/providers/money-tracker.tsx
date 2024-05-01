@@ -1,15 +1,16 @@
 "use client";
-import { ExpenseProviderContext } from "@/contexts/expenses";
-import { Expense, Settings } from "@/types/costs";
+import { MoneyTrackerProviderContext } from "@/contexts/money-tracker";
+import { MoneyTracker, Settings } from "@/types/costs";
 import { useEffect, useState } from "react";
+import { DateRange } from "react-day-picker";
 
-export const ExpenseProvider = ({
+export const MoneyTrackerProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
   const [settings, setSettings] = useState<Settings>({ currency_prefix: "$" });
-  const [data, setData] = useState<Expense[]>([
+  const [data, setData] = useState<MoneyTracker[]>([
     {
       id: "1",
       title: "Groceries",
@@ -54,9 +55,9 @@ export const ExpenseProvider = ({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const expenses = window.localStorage.getItem("expenses");
-      if (expenses) {
-        setData(JSON.parse(expenses));
+      const MoneyTrackers = window.localStorage.getItem("MoneyTrackers");
+      if (MoneyTrackers) {
+        setData(JSON.parse(MoneyTrackers));
       }
     }
   }, []);
@@ -69,14 +70,22 @@ export const ExpenseProvider = ({
     }
   }, []);
 
-  const addExpense = (expense: Expense) => {
-    window.localStorage.setItem("expenses", JSON.stringify([...data, expense]));
-    setData([...data, expense]);
+  const addMoneyTracker = (MoneyTracker: MoneyTracker) => {
+    window.localStorage.setItem(
+      "MoneyTrackers",
+      JSON.stringify([...data, MoneyTracker])
+    );
+    setData([...data, MoneyTracker]);
   };
-  const removeExpense = (id: string) => {
-    const updatedExpenses = data.filter((expense) => expense.id !== id);
-    window.localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-    setData(updatedExpenses);
+  const removeMoneyTracker = (id: string) => {
+    const updatedMoneyTrackers = data.filter(
+      (MoneyTracker) => MoneyTracker.id !== id
+    );
+    window.localStorage.setItem(
+      "MoneyTrackers",
+      JSON.stringify(updatedMoneyTrackers)
+    );
+    setData(updatedMoneyTrackers);
   };
   const setCurrencyPrefix = (prefix: string) => {
     window.localStorage.setItem(
@@ -85,19 +94,26 @@ export const ExpenseProvider = ({
     );
     setSettings({ currency_prefix: prefix });
   };
-
+  const setDateRange = (dateRange: DateRange | undefined) => {
+    window.localStorage.setItem(
+      "settings",
+      JSON.stringify({ ...settings, dateRange })
+    );
+    setSettings({ ...settings, filterDate: dateRange });
+  };
   return (
-    <ExpenseProviderContext.Provider
+    <MoneyTrackerProviderContext.Provider
       value={{
         data,
         setData,
-        addExpense,
-        removeExpense,
+        addMoneyTracker,
+        removeMoneyTracker,
         settings,
         setCurrencyPrefix,
+        setDateRange,
       }}
     >
       {children}
-    </ExpenseProviderContext.Provider>
+    </MoneyTrackerProviderContext.Provider>
   );
 };

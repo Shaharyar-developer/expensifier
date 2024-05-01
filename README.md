@@ -20,8 +20,8 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 
 ## Roadmap
-- Add a Searchbar for expenses
-- Add a filter for expenses
-- Add dynamic editing for expenses
-- Add a way to add new expenses
-- Add a way to delete expenses
+- Add a Searchbar for MoneyTrackers
+- Add a filter for MoneyTrackers
+- Add dynamic editing for MoneyTrackers
+- Add a way to add new MoneyTrackers
+- Add a way to delete MoneyTrackers

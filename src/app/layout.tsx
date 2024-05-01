@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/providers/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ExpenseProvider } from "@/providers/expenses";
+import { MoneyTrackerProvider } from "@/providers/money-tracker";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ExpenseProvider>
+        <MoneyTrackerProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -29,7 +29,7 @@ export default function RootLayout({
           >
             <TooltipProvider>{children}</TooltipProvider>
           </ThemeProvider>
-        </ExpenseProvider>
+        </MoneyTrackerProvider>
       </body>
     </html>
   );
